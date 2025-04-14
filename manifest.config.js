@@ -6,7 +6,7 @@ const manifestConfig = {
   description: "Find sets on RA event pages",
   version: packageJson.version,
   manifest_version: 3,
-  permissions: ["activeTab"],
+  permissions: ["activeTab", "scripting"],
   host_permissions: ["https://ra.co/events/*"],
   action: {
     default_popup: "src/popup/index.html",
@@ -19,14 +19,7 @@ const manifestConfig = {
   background: {
     service_worker: "assets/background.js",
     type: 'module'
-  },
-  content_scripts: [
-    {
-      matches: ["https://ra.co/events/*"],
-      js: ['assets/scraper.js'],
-      run_at: "document_idle"
-    }
-  ]
+  }
 }
 
 writeFileSync('./dist/manifest.json', JSON.stringify(manifestConfig, null, 2))
