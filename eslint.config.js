@@ -5,15 +5,19 @@ import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import tseslint from '@typescript-eslint/eslint-plugin'
 import tsParser from '@typescript-eslint/parser'
+import vitest from 'eslint-plugin-vitest'
+import * as prettier from 'eslint-config-prettier';
 
 export default [
-  { ignores: ['dist'] },
+  { ignores: ['**/build/**', '**/dist/**', '**/node_modules/**', 'eslint.config.js'] },
   {
     files: ['**/*.{js,jsx,ts,tsx}'],
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.es2021,
+        ...globals.node,
+        chrome: 'readonly',
       },
       parser: tsParser,
       parserOptions: {
@@ -42,6 +46,7 @@ export default [
       ...react.configs['jsx-runtime'].rules,
       ...reactHooks.configs.recommended.rules,
       ...tseslint.configs.recommended.rules,
+      ...prettier.rules,
 
       'react/jsx-no-target-blank': 'off',
       'react-refresh/only-export-components': [
