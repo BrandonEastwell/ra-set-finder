@@ -1,5 +1,5 @@
 import { beforeAll, expect } from 'vitest';
-import { findArtistNamesFromDOM } from '../content/scraper.ts';
+import { findArtistNamesFromDOM } from '../content-scripts/scraper.ts';
 
 describe('scrapes artist names from resident advisor event page', () => {
   beforeAll(() => {

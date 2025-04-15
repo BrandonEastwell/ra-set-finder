@@ -12,10 +12,8 @@ export default defineConfig({
     rollupOptions: {
       input: {
         popup: resolve(__dirname, './src/popup/index.html'),
-        panel: resolve(__dirname, './src/side-panel/index.html'),
         options: resolve(__dirname, './src/options/index.html'),
-        scraper: resolve(__dirname, './src/content/scraper.ts'),
-        background: resolve(__dirname, './src/background/background.ts')
+        background: resolve(__dirname, './src/service-workers/background.ts')
       },
       output: {
         entryFileNames: 'assets/[name].js',

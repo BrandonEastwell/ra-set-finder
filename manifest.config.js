@@ -6,16 +6,13 @@ const manifestConfig = {
   description: "Find sets on RA event pages",
   version: packageJson.version,
   manifest_version: 3,
-  permissions: ["activeTab", "scripting"],
+  permissions: ["activeTab", "tabs", "scripting"],
   host_permissions: ["https://ra.co/events/*"],
   action: {
     default_popup: "src/popup/index.html",
     default_icon: "icons/react.svg"
   },
   options_page: "src/options/index.html",
-  side_panel: {
-    default_path: "src/side-panel/index.html"
-  },
   background: {
     service_worker: "assets/background.js",
     type: 'module'

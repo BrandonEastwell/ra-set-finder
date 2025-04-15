@@ -1,8 +1,14 @@
 import '@testing-library/jest-dom';
 
 global.chrome = {
+  tabs: {
+    query: vi.fn(),
+  },
   runtime: {
     onInstalled: {
+      addListener: vi.fn()
+    },
+    onMessage: {
       addListener: vi.fn()
     }
   },

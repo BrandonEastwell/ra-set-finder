@@ -1,11 +1,11 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import '../globals.css';
-import Layout from './Layout.tsx';
+import Popup from './Popup.tsx';
 import React from 'react';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <Layout />
+    <Popup />
   </StrictMode>,
 );
