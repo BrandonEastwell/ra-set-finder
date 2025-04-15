@@ -1,5 +1,7 @@
 
-
+async function sendArtistsToPopup(artists: string[]) {
+  await chrome.runtime.sendMessage({type: "ARTISTS", payload: artists});
+}
 
 function findArtistNamesFromDOM() {
   const artists: string[] = []
