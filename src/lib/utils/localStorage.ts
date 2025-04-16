@@ -1,18 +1,18 @@
-interface TabsCacheItem { tabId: number, Artists: string[] }
-interface TabsCache { Tabs: TabsCacheItem[] }
+interface EventsCacheItem { eventId: number, Artists: string[] }
+interface EventsCache { Events: EventsCacheItem[] }
 
 async function getActiveTabFromLocalStorage() {
   const res = await chrome.storage.local.get(["ActiveTab"])
   return res.ActiveTab.isValidTab ? { isValidTab: res.ActiveTab.isValidTab, tabId: res.ActiveTab.tabId } : null;
 }
 
-async function getTabCacheFromLocalStorage(tabId: number) {
-  const res: TabsCache = await chrome.storage.local.get(["Tabs"])
-  if (res.Tabs) {
-    const cachedTabFound: TabsCacheItem | undefined = res.Tabs.find((item: { tabId: number; }) => item.tabId === tabId)
-    return cachedTabFound ? cachedTabFound : null;
+async function getEventCacheFromLocalStorage(eventId: number) {
+  const res: EventsCache = await chrome.storage.local.get(["Events"])
+  if (res.Events) {
+    const cachedEventFound: EventsCacheItem | undefined = res.Events.find((item: { eventId: number; }) => item.eventId === eventId)
+    return cachedEventFound ? cachedEventFound : null;
   }
   return null
 }
 
-export { getActiveTabFromLocalStorage, getTabCacheFromLocalStorage}
+export { getActiveTabFromLocalStorage, getEventCacheFromLocalStorage}

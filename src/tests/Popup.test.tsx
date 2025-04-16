@@ -9,14 +9,14 @@ async function getActiveTabFromLocalStorageMock() {
   return {isValidTab: true, tabId: 1};
 }
 
-async function getTabCacheFromLocalStorageMock() {
-  await chrome.storage.local.get(["Tabs"])
-  return {tabId: 1, Artists: []}
+async function getEventCacheFromLocalStorageMock() {
+  await chrome.storage.local.get(["Events"])
+  return {eventId: 1, Artists: []}
 }
 
 describe('Popup component of chrome extension', () => {
   beforeAll(() => {
-    vi.spyOn(session, "getTabCacheFromLocalStorage").mockImplementation(getTabCacheFromLocalStorageMock)
+    vi.spyOn(session, "getEventCacheFromLocalStorage").mockImplementation(getEventCacheFromLocalStorageMock)
     vi.spyOn(session, "getActiveTabFromLocalStorage").mockImplementation(getActiveTabFromLocalStorageMock)
   })
 

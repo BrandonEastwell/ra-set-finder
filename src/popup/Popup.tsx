@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { scrapeArtistsFromDOM } from '../lib/utils/scripts.ts';
-import { getActiveTabFromLocalStorage, getTabCacheFromLocalStorage } from '../lib/utils/localStorage.ts';
-
-interface TabsCache { Tabs: TabsCacheItem[] }
-interface TabsCacheItem { tabId: number, Artists: string[] }
+import { getActiveTabFromLocalStorage, getEventCacheFromLocalStorage } from '../lib/utils/localStorage.ts';
+import { EventsCache, EventsCacheItem } from '../lib/types/events.ts';
 
 function Popup() {
   const [artists, setArtists] = useState<string[]>([]);
@@ -12,11 +10,7 @@ function Popup() {
   useEffect(() => {
     async function checkIsValidTab() {
       const currentTab = await getActiveTabFromLocalStorage();
-      setActiveTab((prevState) => {
-        const prevStrState = JSON.stringify(prevState);
-        const currStrState = JSON.stringify(currentTab);
-        return prevStrState !== currStrState ? currentTab : prevState;
-      });
+      setActiveTab(currentTab);
     }
     // Check active tab for validity
     checkIsValidTab()
@@ -25,9 +19,9 @@ function Popup() {
   // Find artists in cache or scrape active tab
   if (activeTab && activeTab.isValidTab && activeTab.tabId) {
     let isTabCached = false;
-    getTabCacheFromLocalStorage(activeTab.tabId).then(res => {
+    getEventCacheFromLocalStorage(activeTab.tabId).then(res => {
       if (res) {
-        res.tabId === activeTab.tabId ? setArtists(res.Artists) : null
+        res.eventId === activeTab.tabId ? setArtists(res.Artists) : null
         isTabCached = true;
       }
     });
@@ -39,17 +33,19 @@ function Popup() {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => receiveMessage(message, sender, sendResponse));
   async function receiveMessage(message: any, sender: chrome.runtime.MessageSender, _sendResponse: (response?: any) => void) {
     if (message.type === "ARTISTS") {
-      const tabId = sender.tab?.id;
-      const tabsCache: TabsCache = await chrome.storage.local.get(["Tabs"]); // Retrieve tab data cache
-      if (tabId) {
-        // If tab cache exists, add new entry
-        if (tabsCache.Tabs) {
-          const cachedTabFound: TabsCacheItem | undefined = tabsCache.Tabs.find((item) => item.tabId === sender.tab?.id)
-          tabsCache.Tabs.push({ tabId: tabId, Artists: message.payload });
-          await chrome.storage.local.set({ Tabs: tabsCache.Tabs });
+      const tabUrl = sender.tab?.url;
+      const eventsCache: EventsCache = await chrome.storage.local.get(["Events"]); // Retrieve tab data cache
+      if (tabUrl) {
+        const splitUrl = tabUrl.split("/");
+        const eventId = splitUrl[splitUrl.length - 1];
+        // If events cache exists, add new entry
+        if (eventsCache.Events) {
+          const cachedEventFound: EventsCacheItem | undefined = eventsCache.Events.find((item) => item.eventId === sender.tab?.id)
+          eventsCache.Events.push({ eventId: parseInt(eventId), Artists: message.payload });
+          await chrome.storage.local.set({ Events: eventsCache.Events });
         } else {
-          // Create tabs cache
-          await chrome.storage.local.set({Tabs: [{ tabId: sender.tab?.id, Artists: message.payload }]})
+          // Create events cache
+          await chrome.storage.local.set({Events: [{ eventId: parseInt(eventId), Artists: message.payload }]})
         }
         setArtists(message.payload);
       }
