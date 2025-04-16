@@ -1,4 +1,4 @@
-
+// Global condition to stop multiple injections
 const artists = findArtistNamesFromDOM();
 sendArtistsToPopup(artists);
 

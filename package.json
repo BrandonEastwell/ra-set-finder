@@ -5,8 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && vite build --config vite.config.content-scripts.js && node manifest.config.js",
-    "build:content-scripts": "vite build --config vite.config.content-scripts.js",
+    "build": "vite build && node manifest.config.js",
     "watch": "vite build --watch && node manifest.config.js",
     "lint": "eslint ./src",
     "test": "vitest",

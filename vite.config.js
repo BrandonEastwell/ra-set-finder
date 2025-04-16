@@ -7,13 +7,15 @@ import { resolve } from 'node:path'
 export default defineConfig({
   plugins: [react(), tailwindcss()],
   base: "./",
+  minify: 'esbuild',
   build: {
     outDir: resolve(__dirname, 'dist'),
     rollupOptions: {
       input: {
         popup: resolve(__dirname, './src/popup/index.html'),
         options: resolve(__dirname, './src/options/index.html'),
-        background: resolve(__dirname, './src/service-workers/background.ts')
+        background: resolve(__dirname, './src/service-workers/background.ts'),
+        scraper: resolve(__dirname, './src/content-scripts/scraper.ts')
       },
       output: {
         entryFileNames: 'assets/[name].js',

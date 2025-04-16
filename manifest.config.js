@@ -6,7 +6,7 @@ const manifestConfig = {
   description: "Find sets on RA event pages",
   version: packageJson.version,
   manifest_version: 3,
-  permissions: ["activeTab", "tabs", "scripting"],
+  permissions: ["activeTab", "scripting", "storage"],
   host_permissions: ["https://ra.co/events/*"],
   action: {
     default_popup: "src/popup/index.html",
