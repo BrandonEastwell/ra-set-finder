@@ -6,7 +6,7 @@ import * as session from '../lib/utils/localStorage.ts';
 
 async function getActiveTabFromLocalStorageMock() {
   await chrome.storage.local.get(["ActiveTab"])
-  return {isValidTab: true, tabId: 1};
+  return {isValidTab: true, tabId: 1, eventId: 12413};
 }
 
 async function getEventCacheFromLocalStorageMock() {
@@ -16,7 +16,7 @@ async function getEventCacheFromLocalStorageMock() {
 
 describe('Popup component of chrome extension', () => {
   beforeAll(() => {
-    vi.spyOn(session, "getEventCacheFromLocalStorage").mockImplementation(getEventCacheFromLocalStorageMock)
+    vi.spyOn(session, "getEventsCacheFromLocalStorage").mockImplementation(getEventCacheFromLocalStorageMock)
     vi.spyOn(session, "getActiveTabFromLocalStorage").mockImplementation(getActiveTabFromLocalStorageMock)
   })
 
@@ -30,7 +30,7 @@ describe('Popup component of chrome extension', () => {
   });
 
   it('should show extension popup when URL matches', async () => {
-    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: true, tabId: 1 })
+    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: true, tabId: 1, eventId: 234563 })
     render(<Popup />);
 
     await waitFor(() => {
@@ -39,7 +39,7 @@ describe('Popup component of chrome extension', () => {
   });
 
   it('should handle unrecognised tab by a tooltip popup', async () => {
-    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: false, tabId: 1 })
+    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: false, tabId: 1, eventId: null })
     render(<Popup />);
 
     await waitFor(() => {
@@ -48,7 +48,7 @@ describe('Popup component of chrome extension', () => {
   });
 
   it('should not inject scraper script when URL does not match', async () => {
-    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: false, tabId: 1 })
+    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: false, tabId: 1, eventId: null })
     const executeContentScriptMock = vi.spyOn(chrome.scripting, "executeScript");
     render(<Popup />);
 
@@ -58,7 +58,8 @@ describe('Popup component of chrome extension', () => {
   });
 
   it('should inject scraper script when URL matches', async () => {
-    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: true, tabId: 1 })
+    vi.spyOn(session, "getActiveTabFromLocalStorage").mockResolvedValue({ isValidTab: true, tabId: 1, eventId: 13324 })
+    vi.spyOn(session, "getEventsCacheFromLocalStorage").mockResolvedValue(null)
     const executeContentScriptSpy = vi.spyOn(chrome.scripting, "executeScript")
     render(<Popup />);
 
