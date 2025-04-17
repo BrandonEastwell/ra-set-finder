@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
+import { SetVideo } from '../types/objects.ts';
 
 const apiKey = import.meta.env.VITE_API_KEY
 const apiUrl = import.meta.env.VITE_API_URL
 
-interface SetVideo {
-  title: string,
-  videoId: string,
-  thumbnail: string
-}
-
-export default function ArtistCard({artist} : {artist: string}) {
-  const [artistSets, setArtistSets] = useState<SetVideo[] | null>(null)
+export default function ArtistCard({ artist, sets, eventId } : { artist: string, sets: SetVideo[] | null, eventId: number }) {
+  const [artistSets, setArtistSets] = useState<SetVideo[] | null>(sets)
 
   async function getSearchResults(artist: string) {
     const query = artist + " dj set"

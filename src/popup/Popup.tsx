@@ -1,14 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { scrapeArtistsFromDOM } from '../lib/utils/scripts.ts';
 import { getActiveTabFromLocalStorage, getEventsCacheFromLocalStorage } from '../lib/utils/localStorage.ts';
-import { ActiveTab, EventsCache } from '../lib/types/objects.ts';
+import { ActiveTab, Artist, EventsCache, EventsCacheItem } from '../lib/types/objects.ts';
 import { urlToEventId } from '../lib/utils/helpers.ts';
 import ArtistList from '../lib/components/ArtistList.tsx';
 
 function Popup() {
   const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
-  const artistsRef = useRef<string[] | null>(null);
+  const artistsRef = useRef<Artist[] | null>(null);
   const activeTabRef = useRef<ActiveTab | null>(null);
 
   useEffect(() => {
@@ -27,7 +27,7 @@ function Popup() {
       // Find artists in cache or scrape active tab
       const cached = await getEventsCacheFromLocalStorage(activeTab.eventId);
       if (cached) {
-        artistsRef.current = cached.Artists;
+        artistsRef.current = cached.artists;
         setIsLoaded(true);
       } else {
         await scrapeArtistsFromDOM(activeTab.tabId); // Inject content scraper script
@@ -50,19 +50,24 @@ function Popup() {
   ) {
     if (message.type === 'ARTISTS') {
       const tabUrl = sender.tab?.url;
-      const eventsCache: EventsCache = await chrome.storage.local.get(['Events']); // Retrieve tab data cache
+      const eventsCache: EventsCache = await chrome.storage.local.get(['events']); // Retrieve events data cache
       if (tabUrl) {
         const eventId = urlToEventId(tabUrl);
-        // If events cache exists, add new entry
-        if (eventsCache.Events) {
-          const cachedEventFound: boolean = eventsCache.Events.some(item => item.eventId === Number(eventId));
-          if (cachedEventFound) return;
-          eventsCache.Events.push({ eventId: Number(eventId), Artists: message.payload });
-          await chrome.storage.local.set({ Events: eventsCache.Events });
-        } else {
-          // Create events cache
-          await chrome.storage.local.set({ Events: [{ eventId: Number(eventId), Artists: message.payload }] });
+        const artists: Artist[] = message.payload.map((name: string) => ({name: name, sets: null}));
+        const event: EventsCacheItem = { eventId: Number(eventId), artists: artists };
+
+        // Create events cache
+        if (!eventsCache.events) {
+          return await chrome.storage.local.set({ events: [event] });
         }
+
+        // Check if event is found in cache
+        const cachedEventFound: boolean = eventsCache.events.some(item => item.eventId === Number(eventId));
+        if (cachedEventFound) return;
+
+        // Push new event to cache
+        eventsCache.events.push(event);
+        await chrome.storage.local.set({ events: eventsCache.events });
         artistsRef.current = message.payload;
         setIsLoaded(true);
       }
@@ -74,16 +79,7 @@ function Popup() {
   // TODO: Main button that sends a fetch request to YT API
   // TODO: Cache results to display as history
 
-  if (!activeTabRef.current || !activeTabRef.current.isValidTab) {
-    return (
-      <div data-testid="popup-unmatched" className="flex flex-col w-[360px] h-[100px] shadow overflow-auto">
-        <p>This extension does not work on this page.</p>
-        <p>
-          Set Finder only works on <a href="http://ra.co/events">resident advisor</a> event pages.
-        </p>
-      </div>
-    );
-  } else {
+  if (activeTabRef.current && artistsRef.current) {
     return (
       <div
         data-testid="popup-matched"
@@ -91,14 +87,29 @@ function Popup() {
         <div className="flex flex-col px-6 py-4 min-h-[200px] bg-[#121212]">
           <h1 className="mb-2 text-6xl text-purered">RA SET FINDER</h1>
           <div className="flex flex-col gap-2">
-            <p className="text-slatewhite text-3xl">Discover live sets for every DJ on the lineup</p>
-            <p className="text-slatewhite text-3xl">Click to Discover</p>
+            {!activeTabRef.current.isValidTab && (
+              <div data-testid="popup-unmatched">
+                <p>This extension does not work on this page.</p>
+                <p>
+                  Set Finder only works on <a href="http://ra.co/events">resident advisor</a> event pages.
+                </p>
+              </div>
+            )}
+            {activeTabRef.current.isValidTab && (
+              <div data-testid="popup-matched">
+                <p className="text-slatewhite text-3xl">Discover live sets for every DJ on the lineup</p>
+                <p className="text-slatewhite text-3xl">Click to Discover</p>
+              </div>
+            )}
           </div>
         </div>
-        <ArtistList artists={artistsRef.current} />
+        {activeTabRef.current.eventId && (
+          <ArtistList artists={artistsRef.current} eventId={activeTabRef.current.eventId} />
+        )}
       </div>
     );
   }
+
 }
 
 export default Popup;

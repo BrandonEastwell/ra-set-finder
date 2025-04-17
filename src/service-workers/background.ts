@@ -9,9 +9,9 @@ async function updateActiveTabStatus(tabId: number) {
   const tab = await chrome.tabs.get(tabId);
   if (tab.url && tab.url.startsWith('https://ra.co/events')) {
     const eventId = urlToEventId(tab.url);
-    await chrome.storage.local.set({ ActiveTab: { isValidTab: true, tabId: tabId, eventId: Number(eventId) } });
+    await chrome.storage.local.set({ activeTab: { isValidTab: true, tabId: tabId, eventId: Number(eventId) } });
   } else {
-    await chrome.storage.local.set({ ActiveTab: { isValidTab: false, tabId: tabId, eventId: null } });
+    await chrome.storage.local.set({ activeTab: { isValidTab: false, tabId: tabId, eventId: null } });
   }
 }
 

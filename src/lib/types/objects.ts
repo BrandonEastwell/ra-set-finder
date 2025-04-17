@@ -1,14 +1,26 @@
 interface EventsCache {
-  Events: EventsCacheItem[];
+  events: EventsCacheItem[];
 }
 interface EventsCacheItem {
   eventId: number;
-  Artists: string[];
+  artists: Artist[];
 }
+
+interface Artist {
+  name: string;
+  sets: SetVideo[] | null;
+}
+
 interface ActiveTab {
   isValidTab: boolean;
   tabId: number;
   eventId: number | null;
 }
 
-export { EventsCache, EventsCacheItem, ActiveTab };
+interface SetVideo {
+  title: string,
+  videoId: string,
+  thumbnail: string
+}
+
+export { EventsCache, EventsCacheItem, ActiveTab, SetVideo, Artist };
