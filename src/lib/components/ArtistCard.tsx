@@ -3,8 +3,14 @@ import React, { useState } from 'react';
 const apiKey = import.meta.env.VITE_API_KEY
 const apiUrl = import.meta.env.VITE_API_URL
 
+interface SetVideo {
+  title: string,
+  videoId: string,
+  thumbnail: string
+}
+
 export default function ArtistCard({artist} : {artist: string}) {
-  const [artistSets, setArtistSets] = useState(null)
+  const [artistSets, setArtistSets] = useState<SetVideo[] | null>(null)
 
   async function getSearchResults(artist: string) {
     const query = artist + " dj set"
@@ -14,28 +20,30 @@ export default function ArtistCard({artist} : {artist: string}) {
     url.searchParams.set("maxResults", "5");
     url.searchParams.set("type", "video");
     url.searchParams.set("videoDuration", "long");
+    url.searchParams.set("key", apiKey)
 
     const res = await fetch(url.toString(), {
       method: "GET",
-      headers: {
-        Authorization: `Bearer ${apiKey}`
-      }})
+    })
 
     if (!res.ok) {
       throw new Error(`YouTube API error: ${res.status}`);
     }
 
-    return await res.json();
+    const data = await res.json();
+    const sets: SetVideo[] = data.items.map((item: any) =>
+      ({title: item.snippet.title, videoId: item.id.videoId, thumbnail: item.snippet.thumbnails.default.url}))
+    setArtistSets(sets);
   }
 
   return (
-    <div className="flex flex-col py-4 border-b-1 border-t-1 border-slatewhite">
-      <div key={artist} className="flex flex-row">
-        <p onClick={() => getSearchResults(artist)} className="text-slatewhite text-4xl cursor-pointer hover:text-purered">{artist}</p>
+    <div className="flex flex-col border-b-1 border-t-1 border-slatewhite/10">
+      <div key={artist} className="flex flex-row py-4 cursor-pointer">
+        <p onClick={() => getSearchResults(artist)} className="text-slatewhite text-4xl hover:text-purered">{artist}</p>
       </div>
-      {artistSets && (
-        <></>
-      )}
+      {artistSets && artistSets.map((set) => (
+        <p>{set.title}</p>
+      ))}
     </div>
 
   )
