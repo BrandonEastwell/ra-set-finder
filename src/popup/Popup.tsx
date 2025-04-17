@@ -38,6 +38,8 @@ function Popup() {
 
   // Listen for message from scraper script
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => receiveMessage(message, sender, sendResponse));
+
+  // TODO: Move receiveMessage function to an external messaging service
   async function receiveMessage(message: any, sender: chrome.runtime.MessageSender, _sendResponse: (response?: any) => void) {
     if (message.type === "ARTISTS") {
       const tabUrl = sender.tab?.url;
@@ -60,6 +62,11 @@ function Popup() {
     }
   }
 
+  // TODO: Split into components
+  // TODO: Connect Youtube API, use artists to query sets
+  // TODO: Main button that sends a fetch request to YT API
+  // TODO: Cache results to display as history
+
   if (!activeTabRef.current || !activeTabRef.current.isValidTab) {
     return (
       <div data-testid="popup-unmatched" className="flex flex-col w-[360px] h-[100px] shadow overflow-auto">
@@ -69,8 +76,11 @@ function Popup() {
     );
   } else {
     return (
-      <div data-testid="popup-matched" className="flex flex-col border w-[360px] h-[600px] shadow overflow-auto">
-        {artistsRef.current && artistsRef.current.map((artist) => (<p>{artist}</p>))}
+      <div data-testid="popup-matched" className="flex flex-col font-gothic bg-[#121212] p-5 border-1 border-purered min-w-[450px] h-[400px]">
+        <h1 className="mb-3 text-left text-6xl text-purered">RA SET FINDER</h1>
+        <div className="">
+          <button className="p-2 bg-purered text-slatewhite text-3xl rounded-full w-[175px] h-[175px]">DISCOVER</button>
+        </div>
       </div>
     );
   }
