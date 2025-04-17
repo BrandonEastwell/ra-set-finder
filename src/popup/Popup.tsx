@@ -27,37 +27,43 @@ function Popup() {
       const cached = await getEventsCacheFromLocalStorage(activeTab.eventId);
       if (cached) {
         artistsRef.current = cached.Artists;
-        setIsLoaded(true)
+        setIsLoaded(true);
       } else {
         await scrapeArtistsFromDOM(activeTab.tabId); // Inject content scraper script
       }
     }
 
-    loadPopupData()
+    loadPopupData();
   }, []);
 
   // Listen for message from scraper script
-  chrome.runtime.onMessage.addListener((message, sender, sendResponse) => receiveMessage(message, sender, sendResponse));
+  chrome.runtime.onMessage.addListener((message, sender, sendResponse) =>
+    receiveMessage(message, sender, sendResponse),
+  );
 
   // TODO: Move receiveMessage function to an external messaging service
-  async function receiveMessage(message: any, sender: chrome.runtime.MessageSender, _sendResponse: (response?: any) => void) {
-    if (message.type === "ARTISTS") {
+  async function receiveMessage(
+    message: any,
+    sender: chrome.runtime.MessageSender,
+    _sendResponse: (response?: any) => void,
+  ) {
+    if (message.type === 'ARTISTS') {
       const tabUrl = sender.tab?.url;
-      const eventsCache: EventsCache = await chrome.storage.local.get(["Events"]); // Retrieve tab data cache
+      const eventsCache: EventsCache = await chrome.storage.local.get(['Events']); // Retrieve tab data cache
       if (tabUrl) {
         const eventId = urlToEventId(tabUrl);
         // If events cache exists, add new entry
         if (eventsCache.Events) {
-          const cachedEventFound: boolean = eventsCache.Events.some((item) => item.eventId === Number(eventId))
-          if (cachedEventFound) return
+          const cachedEventFound: boolean = eventsCache.Events.some(item => item.eventId === Number(eventId));
+          if (cachedEventFound) return;
           eventsCache.Events.push({ eventId: Number(eventId), Artists: message.payload });
           await chrome.storage.local.set({ Events: eventsCache.Events });
         } else {
           // Create events cache
-          await chrome.storage.local.set({ Events: [{ eventId: Number(eventId), Artists: message.payload }] })
+          await chrome.storage.local.set({ Events: [{ eventId: Number(eventId), Artists: message.payload }] });
         }
         artistsRef.current = message.payload;
-        setIsLoaded(true)
+        setIsLoaded(true);
       }
     }
   }
@@ -71,12 +77,16 @@ function Popup() {
     return (
       <div data-testid="popup-unmatched" className="flex flex-col w-[360px] h-[100px] shadow overflow-auto">
         <p>This extension does not work on this page.</p>
-        <p>Set Finder only works on <a href="http://ra.co/events">resident advisor</a> event pages.</p>
+        <p>
+          Set Finder only works on <a href="http://ra.co/events">resident advisor</a> event pages.
+        </p>
       </div>
     );
   } else {
     return (
-      <div data-testid="popup-matched" className="flex flex-col font-gothic bg-[#121212] p-5 border-1 border-purered min-w-[450px] h-[400px]">
+      <div
+        data-testid="popup-matched"
+        className="flex flex-col font-gothic bg-[#121212] p-5 border-1 border-purered min-w-[450px] h-[400px]">
         <h1 className="mb-3 text-left text-6xl text-purered">RA SET FINDER</h1>
         <div className="">
           <button className="p-2 bg-purered text-slatewhite text-3xl rounded-full w-[175px] h-[175px]">DISCOVER</button>

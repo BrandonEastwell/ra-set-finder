@@ -2,7 +2,7 @@
 @import 'tailwindcss';
 
 :root {
-  font-family: "League Gothic", Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  font-family: 'League Gothic', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
 
@@ -17,11 +17,11 @@
 }
 
 @theme {
-  --font-gothic: "League Gothic", sans-serif;
-  --color-slatewhite: #F2F2F2;
-  --color-purered: #FF4848;
+  --font-gothic: 'League Gothic', sans-serif;
+  --color-slatewhite: #f2f2f2;
+  --color-purered: #ff4848;
   --color-darkgrey: #333333;
-  --color-lightgrey: #CCCCCC;
+  --color-lightgrey: #cccccc;
 }
 
 a {

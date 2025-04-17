@@ -4,36 +4,36 @@ global.chrome = {
   tabs: {
     query: vi.fn(),
     onActivated: {
-      addListener: vi.fn()
+      addListener: vi.fn(),
     },
     onUpdated: {
-      addListener: vi.fn()
+      addListener: vi.fn(),
     },
-    get: vi.fn()
+    get: vi.fn(),
   },
   storage: {
     local: {
       get: vi.fn(),
-      set: vi.fn()
-    }
+      set: vi.fn(),
+    },
   },
   runtime: {
     onInstalled: {
-      addListener: vi.fn()
+      addListener: vi.fn(),
     },
     onMessage: {
-      addListener: vi.fn()
+      addListener: vi.fn(),
     },
-    sendMessage: vi.fn()
+    sendMessage: vi.fn(),
   },
   action: {
     onClicked: {
-      addListener: vi.fn()
+      addListener: vi.fn(),
     },
     setBadgeText: vi.fn(),
-    getBadgeText: vi.fn()
+    getBadgeText: vi.fn(),
   },
   scripting: {
-    executeScript: vi.fn()
-  }
-} as unknown as typeof chrome
+    executeScript: vi.fn(),
+  },
+} as unknown as typeof chrome;

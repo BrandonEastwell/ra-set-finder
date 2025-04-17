@@ -33,11 +33,11 @@ describe('scrapes artist names from resident advisor event page', () => {
           </div>
         </body>
       </html>
-    `
-  })
+    `;
+  });
 
   it('should return names of artists', () => {
     const artists = findArtistNamesFromDOM();
-    expect(artists).toEqual(["MARRØN", "Rene Wise", "Juliana Huxtable", "Rommek"])
+    expect(artists).toEqual(['MARRØN', 'Rene Wise', 'Juliana Huxtable', 'Rommek']);
   });
 });
