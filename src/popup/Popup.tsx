@@ -3,6 +3,7 @@ import { scrapeArtistsFromDOM } from '../lib/utils/scripts.ts';
 import { getActiveTabFromLocalStorage, getEventsCacheFromLocalStorage } from '../lib/utils/localStorage.ts';
 import { ActiveTab, EventsCache } from '../lib/types/objects.ts';
 import { urlToEventId } from '../lib/utils/helpers.ts';
+import ArtistList from '../lib/components/ArtistList.tsx';
 
 function Popup() {
   const [isLoaded, setIsLoaded] = useState(false);
@@ -86,11 +87,15 @@ function Popup() {
     return (
       <div
         data-testid="popup-matched"
-        className="flex flex-col font-gothic bg-[#121212] p-5 border-1 border-purered min-w-[450px] h-[400px]">
-        <h1 className="mb-3 text-left text-6xl text-purered">RA SET FINDER</h1>
-        <div className="">
-          <button className="p-2 bg-purered text-slatewhite text-3xl rounded-full w-[175px] h-[175px]">DISCOVER</button>
+        className="flex flex-col font-gothic border-1 border-[#121212] min-w-[450px] max-h-[600px] overflow-hidden">
+        <div className="flex flex-col px-6 py-4 min-h-[200px] bg-[#121212]">
+          <h1 className="mb-2 text-6xl text-purered">RA SET FINDER</h1>
+          <div className="flex flex-col gap-2">
+            <p className="text-slatewhite text-3xl">Discover live sets for every DJ on the lineup</p>
+            <p className="text-slatewhite text-3xl">Click to Discover</p>
+          </div>
         </div>
+        <ArtistList artists={artistsRef.current} />
       </div>
     );
   }
