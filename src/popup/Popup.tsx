@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { scrapeArtistsFromDOM } from '../lib/utils/scripts.ts';
 import { getActiveTabFromLocalStorage, getEventsCacheFromLocalStorage } from '../lib/utils/localStorage.ts';
-import { ActiveTab, EventsCache, EventsCacheItem } from '../lib/types/objects.ts';
+import { ActiveTab, EventsCache } from '../lib/types/objects.ts';
 import { urlToEventId } from '../lib/utils/helpers.ts';
 
 function Popup() {
-  const [isReady, setIsReady] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
   const [hasError, setHasError] = useState(false);
   const artistsRef = useRef<string[] | null>(null);
   const activeTabRef = useRef<ActiveTab | null>(null);
@@ -17,7 +17,7 @@ function Popup() {
 
       if (!activeTab?.isValidTab || !activeTab.eventId) {
         setHasError(true);
-        setIsReady(true);
+        setIsLoaded(true);
         return;
       }
 
@@ -27,11 +27,10 @@ function Popup() {
       const cached = await getEventsCacheFromLocalStorage(activeTab.eventId);
       if (cached) {
         artistsRef.current = cached.Artists;
+        setIsLoaded(true)
       } else {
         await scrapeArtistsFromDOM(activeTab.tabId); // Inject content scraper script
       }
-
-      setIsReady(true)
     }
 
     loadPopupData()
@@ -56,7 +55,7 @@ function Popup() {
           await chrome.storage.local.set({ Events: [{ eventId: Number(eventId), Artists: message.payload }] })
         }
         artistsRef.current = message.payload;
-        console.log(artistsRef.current)
+        setIsLoaded(true)
       }
     }
   }
