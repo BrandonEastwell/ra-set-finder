@@ -10,7 +10,7 @@ export default function ArtistList({ artists, eventId } : { artists: Artist[], e
       <p onClick={() => setToggleList((prevState) => !prevState)} className="text-slatewhite text-4xl cursor-pointer mb-4">Sets</p>
       {toggleList && artists && <div className="overflow-y-scroll">
         {artists.map((artist) => (
-          <ArtistCard artist={artist.name} sets={artist.sets} />
+          <ArtistCard artist={artist.name} sets={artist.sets} eventId={eventId} />
         ))}
       </div>}
     </div>
