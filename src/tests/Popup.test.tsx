@@ -1,17 +1,16 @@
-import { screen, render, waitFor } from '@testing-library/react';
-import { beforeAll, expect, vi } from 'vitest';
 import Popup from '../popup/Popup.tsx';
 import React from 'react';
 import * as session from '../lib/utils/localStorage.ts';
+import { render, waitFor, screen } from '@testing-library/react';
 
 async function getActiveTabFromLocalStorageMock() {
-  await chrome.storage.local.get(['ActiveTab']);
+  await chrome.storage.local.get(['activeTab']);
   return { isValidTab: true, tabId: 1, eventId: 12413 };
 }
 
 async function getEventCacheFromLocalStorageMock() {
-  await chrome.storage.local.get(['Events']);
-  return { eventId: 1, Artists: [] };
+  await chrome.storage.local.get(['events']);
+  return { eventId: 1, artists: [] };
 }
 
 describe('Popup component of chrome extension', () => {
@@ -25,11 +24,11 @@ describe('Popup component of chrome extension', () => {
     render(<Popup />);
 
     await waitFor(() => {
-      expect(mock).toHaveBeenCalledWith(['ActiveTab']);
+      expect(mock).toHaveBeenCalledWith(['activeTab']);
     });
   });
 
-  it('should show extension popup when URL matches', async () => {
+  it('should show popup matched component when URL matches', async () => {
     vi.spyOn(session, 'getActiveTabFromLocalStorage').mockResolvedValue({
       isValidTab: true,
       tabId: 1,
@@ -42,7 +41,7 @@ describe('Popup component of chrome extension', () => {
     });
   });
 
-  it('should handle unrecognised tab by a tooltip popup', async () => {
+  it('should show popup unmatched component when URL is unrecognised', async () => {
     vi.spyOn(session, 'getActiveTabFromLocalStorage').mockResolvedValue({ isValidTab: false, tabId: 1, eventId: null });
     render(<Popup />);
 

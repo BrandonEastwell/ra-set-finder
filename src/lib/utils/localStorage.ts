@@ -2,9 +2,9 @@ import { EventsCache, EventsCacheItem } from '../types/objects.ts';
 
 async function getActiveTabFromLocalStorage() {
   const res = await chrome.storage.local.get(['activeTab']);
-  return res.ActiveTab.isValidTab
-    ? { isValidTab: res.ActiveTab.isValidTab, tabId: res.ActiveTab.tabId, eventId: res.ActiveTab.eventId }
-    : { isValidTab: res.ActiveTab.isValidTab, tabId: res.ActiveTab.tabId, eventId: null };
+  return res.activeTab.isValidTab
+    ? { isValidTab: res.activeTab.isValidTab, tabId: res.activeTab.tabId, eventId: res.activeTab.eventId }
+    : { isValidTab: res.activeTab.isValidTab, tabId: res.activeTab.tabId, eventId: null };
 }
 
 async function getEventsCacheFromLocalStorage(eventId: number) {

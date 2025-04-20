@@ -1,33 +1,44 @@
 import React, { useState } from 'react';
 import { EventsCache, SetVideo } from '../types/objects.ts';
 
-const apiKey = import.meta.env.VITE_API_KEY
-const apiUrl = import.meta.env.VITE_API_URL
+const apiKey = import.meta.env.VITE_API_KEY;
+const apiUrl = import.meta.env.VITE_API_URL;
 
-export default function ArtistCard({ artist, sets, eventId } : { artist: string, sets: SetVideo[] | null, eventId: number }) {
-  const [artistSets, setArtistSets] = useState<SetVideo[] | null>(sets)
+export default function ArtistCard({
+  artist,
+  sets,
+  eventId,
+}: {
+  artist: string;
+  sets: SetVideo[] | null;
+  eventId: number;
+}) {
+  const [artistSets, setArtistSets] = useState<SetVideo[] | null>(sets);
 
   async function getSearchResults() {
-    const query = artist + " dj set"
+    const query = artist + ' dj set';
     const url = new URL(`${apiUrl}/search`);
-    url.searchParams.set("part", "snippet");
-    url.searchParams.set("q", query);
-    url.searchParams.set("maxResults", "5");
-    url.searchParams.set("type", "video");
-    url.searchParams.set("videoDuration", "long");
-    url.searchParams.set("key", apiKey)
+    url.searchParams.set('part', 'snippet');
+    url.searchParams.set('q', query);
+    url.searchParams.set('maxResults', '5');
+    url.searchParams.set('type', 'video');
+    url.searchParams.set('videoDuration', 'long');
+    url.searchParams.set('key', apiKey);
 
     const res = await fetch(url.toString(), {
-      method: "GET",
-    })
+      method: 'GET',
+    });
 
     if (!res.ok) {
       throw new Error(`YouTube API error: ${res.status}`);
     }
 
     const data = await res.json();
-    const sets: SetVideo[] = data.items.map((item: any) =>
-      ({title: item.snippet.title, videoId: item.id.videoId, thumbnail: item.snippet.thumbnails.default.url}))
+    const sets: SetVideo[] = data.items.map((item: any) => ({
+      title: item.snippet.title,
+      videoId: item.id.videoId,
+      thumbnail: item.snippet.thumbnails.default.url,
+    }));
     return sets;
   }
 
@@ -41,7 +52,7 @@ export default function ArtistCard({ artist, sets, eventId } : { artist: string,
     if (cachedEventIndex === -1) return;
 
     const event = eventsCache[cachedEventIndex];
-    const cachedArtistIndex: number = event.artists.findIndex((item) => item.name === artist);
+    const cachedArtistIndex: number = event.artists.findIndex(item => item.name === artist);
     if (cachedArtistIndex === -1) return;
 
     const artistData = event.artists[cachedArtistIndex];
@@ -54,23 +65,21 @@ export default function ArtistCard({ artist, sets, eventId } : { artist: string,
       const sets = await getSearchResults();
       // Update cache
       artistData.sets = sets;
-      await chrome.storage.local.set({events: eventsCache})
+      await chrome.storage.local.set({ events: eventsCache });
       setArtistSets(sets);
     } catch (e) {
-      console.error(e)
+      console.error(e);
     }
-
   }
 
   return (
     <div className="flex flex-col border-b-1 border-t-1 border-slatewhite/10">
       <div key={artist} className="flex flex-row py-4 cursor-pointer">
-        <p onClick={() => getSetsList()} className="text-slatewhite text-4xl hover:text-purered">{artist}</p>
+        <p onClick={() => getSetsList()} className="text-slatewhite text-4xl hover:text-purered">
+          {artist}
+        </p>
       </div>
-      {artistSets && artistSets.map((set) => (
-        <p>{set.title}</p>
-      ))}
+      {artistSets && artistSets.map(set => <p>{set.title}</p>)}
     </div>
-
-  )
+  );
 }

@@ -1,4 +1,3 @@
-import { expect, vi } from 'vitest';
 import { scrapeArtistsFromDOM } from '../lib/utils/scripts.ts';
 
 describe('Tests script execution', () => {

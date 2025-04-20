@@ -18,9 +18,9 @@ interface ActiveTab {
 }
 
 interface SetVideo {
-  title: string,
-  videoId: string,
-  thumbnail: string
+  title: string;
+  videoId: string;
+  thumbnail: string;
 }
 
 export { EventsCache, EventsCacheItem, ActiveTab, SetVideo, Artist };
