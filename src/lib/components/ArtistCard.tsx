@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { EventsCache, SetVideo } from '../types/objects.ts';
 
-const apiKey = import.meta.env.VITE_API_KEY;
-const apiUrl = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:4000";
 
 export default function ArtistCard({
   artist,
@@ -16,15 +15,8 @@ export default function ArtistCard({
   const [artistSets, setArtistSets] = useState<SetVideo[] | null>(sets);
 
   async function getSearchResults() {
-    const query = artist + ' dj set';
-    const url = new URL(`${apiUrl}/search`);
-    url.searchParams.set('part', 'snippet');
-    url.searchParams.set('q', query);
-    url.searchParams.set('maxResults', '5');
-    url.searchParams.set('type', 'video');
-    url.searchParams.set('videoDuration', 'long');
-    url.searchParams.set('key', apiKey);
-
+    const url = new URL(`${API_URL}/search`)
+    url.searchParams.set("artist", artist);
     const res = await fetch(url.toString(), {
       method: 'GET',
     });
@@ -34,11 +26,7 @@ export default function ArtistCard({
     }
 
     const data = await res.json();
-    const sets: SetVideo[] = data.items.map((item: any) => ({
-      title: item.snippet.title,
-      videoId: item.id.videoId,
-      thumbnail: item.snippet.thumbnails.default.url,
-    }));
+    const sets: SetVideo[] = data.results;
     return sets;
   }
 

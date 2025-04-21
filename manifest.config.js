@@ -7,7 +7,7 @@ const manifestConfig = {
   version: packageJson.version,
   manifest_version: 3,
   permissions: ["activeTab", "scripting", "storage"],
-  host_permissions: ["https://ra.co/events/*"],
+  host_permissions: ["https://ra.co/events/*", 'https://localhost:4000/*'],
   action: {
     default_popup: "src/popup/index.html",
     default_icon: "icons/react.svg"

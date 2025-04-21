@@ -1,17 +1,14 @@
-const apiKey = process.env.API_KEY;
-const apiUrl = process.env.API_URL;
-
 async function searchController(req, res) {
   try {
     const { artist } = req.query;
     const query = artist + ' dj set';
-    const url = new URL(`${apiUrl}/search`);
+    const url = new URL(`${process.env.API_URL}/search`);
     url.searchParams.set('part', 'snippet');
     url.searchParams.set('q', query);
     url.searchParams.set('maxResults', '5');
     url.searchParams.set('type', 'video');
     url.searchParams.set('videoDuration', 'long');
-    url.searchParams.set('key', apiKey);
+    url.searchParams.set('key', process.env.API_KEY);
 
     const response = await fetch(url.toString(), {
       method: 'GET',

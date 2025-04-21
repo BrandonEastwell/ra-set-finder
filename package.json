@@ -9,7 +9,7 @@
     "watch": "vite build --watch && node manifest.config.js",
     "lint": "eslint ./src",
     "test": "vitest",
-    "test:coverage": "vitest --coverage",
+    "coverage": "vitest --coverage",
     "preview": "vite preview",
     "prettier": "prettier --write ./src"
   },
