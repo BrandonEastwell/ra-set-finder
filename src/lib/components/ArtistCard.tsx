@@ -13,6 +13,7 @@ export default function ArtistCard({
   eventId: number;
 }) {
   const [artistSets, setArtistSets] = useState<SetVideo[] | null>(sets);
+  const [showSets, setShowSets] = useState<boolean>(false);
 
   async function getSearchResults() {
     const url = new URL(`${API_URL}/search`)
@@ -31,6 +32,8 @@ export default function ArtistCard({
   }
 
   async function getSetsList() {
+    if (showSets) return setShowSets(false);
+
     // Retrieve events data cache
     const cache: EventsCache = await chrome.storage.local.get(['events']);
     const eventsCache = cache.events;
@@ -46,7 +49,11 @@ export default function ArtistCard({
     const artistData = event.artists[cachedArtistIndex];
 
     // If sets found in cache, use it
-    if (artistData.sets) return setArtistSets(artistData.sets);
+    if (artistData.sets) {
+      setShowSets(true);
+      setArtistSets(artistData.sets);
+      return
+    }
 
     // No artist sets found in cache, fetch new sets
     try {
@@ -54,6 +61,7 @@ export default function ArtistCard({
       // Update cache
       artistData.sets = sets;
       await chrome.storage.local.set({ events: eventsCache });
+      setShowSets(true)
       setArtistSets(sets);
     } catch (e) {
       console.error(e);
@@ -67,7 +75,18 @@ export default function ArtistCard({
           {artist}
         </p>
       </div>
-      {artistSets && artistSets.map(set => <p>{set.title}</p>)}
+      {showSets && artistSets && artistSets.map(set => (
+        <a href={`https://www.youtube.com/watch?v=${set.videoId}`} target="_blank" className="cursor-pointer">
+          <div key={set.videoId} className="grid grid-cols-[1fr_2fr] gap-2 w-full max-h-[90px] hover:bg-purered/10 items-center overflow-hidden">
+            <div className="rounded-4xl overflow-hidden">
+              <img src={set.thumbnail} alt={`${artist} DJ Set`} className="aspect-auto object-contain"/>
+            </div>
+            <div className="flex flex-col p-1">
+              <p className="text-2xl text-ellipsis line-clamp-2">{set.title}</p>
+            </div>
+          </div>
+        </a>
+      ))}
     </div>
   );
 }
