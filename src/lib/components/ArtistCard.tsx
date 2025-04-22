@@ -70,8 +70,10 @@ export default function ArtistCard({
 
   return (
     <div className="flex flex-col border-b-1 border-t-1 border-slatewhite/10">
-      <div key={artist} className="flex flex-row py-4 cursor-pointer">
-        <p onClick={() => getSetsList()} className="text-slatewhite text-4xl hover:text-purered">
+      <div onClick={() => getSetsList()} key={artist} className="group flex flex-row gap-1 py-4 cursor-pointer items-center">
+        <svg className={`w-[24px] group-hover:fill-purered transition-transform duration-100 ${showSets ? 'rotate-90' : '-rotate-90'}`}
+             xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
+        <p className="text-slatewhite text-4xl group-hover:text-purered">
           {artist}
         </p>
       </div>

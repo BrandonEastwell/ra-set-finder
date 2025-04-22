@@ -88,14 +88,14 @@ function Popup() {
         <h1 className="mb-2 text-6xl text-purered">RA SET FINDER</h1>
         <div className="flex flex-col gap-2">
           {(!activeTab || !activeTab.isValidTab) ? (
-            <div data-testid="popup-unmatched">
+            <div className="flex flex-col gap-2" data-testid="popup-unmatched">
               <p className="text-slatewhite text-3xl">This extension does not work on this page.</p>
               <p className="text-slatewhite text-3xl">Set Finder only works on <a href="http://ra.co/events">resident advisor</a> event pages.</p>
             </div>
           ) : (
-            <div data-testid="popup-matched">
+            <div className="flex flex-col gap-2" data-testid="popup-matched">
               <p className="text-slatewhite text-3xl">Discover live sets for every DJ on the lineup</p>
-              <p className="text-slatewhite text-3xl">Click to Discover</p>
+              {artists && <p className="text-slatewhite text-3xl">Sets found! Discover now</p>}
             </div>
           )}
         </div>
