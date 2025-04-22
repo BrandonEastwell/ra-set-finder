@@ -76,11 +76,6 @@ function Popup() {
     }
   }
 
-  // TODO: Split into components
-  // TODO: Connect Youtube API, use artists to query sets
-  // TODO: Main button that sends a fetch request to YT API
-  // TODO: Cache results to display as history
-
   return (
     <div
       className="flex flex-col font-gothic border-1 border-[#121212] min-w-[450px] max-h-[600px] overflow-hidden">
