@@ -2,7 +2,9 @@
 
 A Chrome extension that enhances [Resident Advisor](https://ra.co/) event pages by scraping DJ lineups and surfacing related DJ sets from YouTube.
 
-![RA Set Finder Demo](./src/assets/demo.gif)
+<p style="align-self: center">
+  <img src="./src/assets/demo.gif" alt="RA Set Finder Demo" style="width:100%; max-width:800px;" />
+</p>
 
 ## Contents
 
