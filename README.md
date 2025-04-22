@@ -1,12 +1,16 @@
+<div style="text-align: center;">
+    <img src="./public/icons/icon.png" alt="RA Set Finder Demo" style="width:100%; max-width:120px;" />
+</div>
+
 # RA Set Finder
 
 `RA Set Finder` is a chrome extension that enhances [Resident Advisor](https://ra.co/) event pages by scraping DJ lineups and surfacing related DJ sets from YouTube.
 
 *I use it to discover artists I have never heard of before.*
 
-<p style="align-self: center">
+<div style="text-align: center;">
   <img src="./src/assets/demo.gif" alt="RA Set Finder Demo" style="width:100%; max-width:800px;" />
-</p>
+</div>
 
 # Contents
 
