@@ -10,7 +10,7 @@ const manifestConfig = {
   host_permissions: ["https://ra.co/events/*", 'https://localhost:4000/*'],
   action: {
     default_popup: "src/popup/index.html",
-    default_icon: "icons/react.svg"
+    default_icon: "icons/icon.png"
   },
   options_page: "src/options/index.html",
   background: {

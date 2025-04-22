@@ -1,7 +1,7 @@
-// Chrome API Action Listeners
 import { urlToEventId } from '../lib/utils/helpers.ts';
 
-chrome.runtime.onInstalled.addListener(() => setBadgeState('OFF'));
+// Chrome API Action Listeners
+// chrome.runtime.onInstalled.addListener(() => setBadgeState('OFF'));
 chrome.tabs.onActivated.addListener(activeInfo => updateActiveTabStatus(activeInfo.tabId));
 chrome.tabs.onUpdated.addListener((tabId, _changeInfo, tab) => (tab.active ? updateActiveTabStatus(tabId) : null));
 
