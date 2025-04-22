@@ -1,12 +1,14 @@
 # RA Set Finder
 
-A Chrome extension that enhances [Resident Advisor](https://ra.co/) event pages by scraping DJ lineups and surfacing related DJ sets from YouTube.
+`RA Set Finder` is a chrome extension that enhances [Resident Advisor](https://ra.co/) event pages by scraping DJ lineups and surfacing related DJ sets from YouTube.
+
+*I use it to discover artists I have never heard of before.*
 
 <p style="align-self: center">
   <img src="./src/assets/demo.gif" alt="RA Set Finder Demo" style="width:100%; max-width:800px;" />
 </p>
 
-## Contents
+# Contents
 
 - [Why?](#why)
 - [Features](#features)
@@ -66,7 +68,7 @@ npm run build
 
 ## Known Issues
 
-- **Youtube API Limitations**: Standard quota of 10,000 when each request costs 100.
+- **Youtube API Limitations**: Standard daily quota of 10,000 when each request costs 100.
 
 ## License
 
