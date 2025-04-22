@@ -8,6 +8,12 @@ const manifestConfig = {
   manifest_version: 3,
   permissions: ["activeTab", "scripting", "storage"],
   host_permissions: ["https://ra.co/events/*", 'https://localhost:4000/*'],
+  icons: {
+    16: "icons/icon.png",
+    32: "icons/icon.png",
+    48: "icons/icon.png",
+    128: "icons/icon.png",
+  },
   action: {
     default_popup: "src/popup/index.html",
     default_icon: "icons/icon.png"
