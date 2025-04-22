@@ -1,9 +1,74 @@
-# React + Vite + Vitest + React Testing Library
+# RA Set Finder
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
-Used https://www.robinwieruch.de/vitest-react-testing-library to setup testing libraries
+A Chrome extension that enhances [Resident Advisor](https://ra.co/) event pages by scraping DJ lineups and surfacing related DJ sets from YouTube.
 
-Currently, two official plugins are available:
+![RA Set Finder Demo](./src/assets/demo.gif)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Contents
+
+- [Why?](#why)
+- [Features](#features)
+- [Setup Locally](#setup-locally)
+- [Technical Stack](#technical-stack)
+- [Known Issues](#known-issues)
+- [License](#license)
+
+## Why?
+
+As a music enthusiast and developer, I wanted a tool to easily surface DJ sets from artists I discover on Resident Advisor. 
+This project helped me explore real-world scraping, Chrome extension APIs, and API proxying while focusing on user experience.
+
+## Features
+
+- Extracts DJ names directly from RA event pages
+- Fetches high-quality DJ set links via YouTube Data API
+- Caches results locally using `chrome.storage`
+- Built with responsiveness and fast load in mind
+
+## Setup Locally
+
+> Project is available for local use with limitations, not published to chrome web store.
+
+#### 1. Clone and install dependencies
+
+```bash
+  # Clone and install dependencies
+git clone https://github.com/BrandonEastwell/RA-Set-Finder.git
+cd RA-Set-Finder
+npm install
+```
+
+#### 2. Build the project
+
+```bash
+  # Build
+npm run build
+```
+
+#### 3. Open Chrome [`chrome extensions`](chrome://extensions)
+
+#### 4. Enable Developer Mode
+
+#### 5. Click `Load unpacked` and select the `/dist` build folder
+
+#### 6. **Done.**
+
+## Technical Stack
+
+- **Frontend**: React + TypeScript + Tailwind CSS
+- **Extension Platform**: Chrome Extension (Manifest V3)
+- **Data Fetching**: YouTube Data API (server-proxied)
+- **State/Cache**: chrome.storage
+- **Testing**: Vitest + React Testing Library + Jest (backend)
+- **Backend Proxy**: Node.js + Express.js (to protect API keys)
+
+## Known Issues
+
+- **Youtube API Limitations**: Standard quota of 10,000 when each request costs 100.
+
+## License
+
+This project is licensed under the MIT License.
+
+You’re welcome to clone, modify, and run the extension locally.  
+It is not currently published to the Chrome Web Store.
