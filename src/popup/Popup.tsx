@@ -16,7 +16,7 @@ function Popup() {
       // Checks active tab for validity
       const tabData = await getActiveTabFromLocalStorage();
       if (!tabData || !tabData.isValidTab || !tabData.eventId) {
-        console.log("Tab is not valid or missing event ID:", tabData);
+        console.log('Tab is not valid or missing event ID:', tabData);
         setHasError(true);
         setIsLoaded(true);
         return;
@@ -27,7 +27,7 @@ function Popup() {
       // Find artists in cache or scrape active tab
       const eventCache = await getEventsCacheFromLocalStorage(tabData.eventId);
       if (eventCache) {
-        setArtists(eventCache.artists)
+        setArtists(eventCache.artists);
       } else {
         await scrapeArtistsFromDOM(tabData.tabId); // Inject content scraper script
       }
@@ -60,7 +60,7 @@ function Popup() {
         // Create events cache
         if (!eventsCache.events) {
           await chrome.storage.local.set({ events: [event] });
-          setArtists(artists)
+          setArtists(artists);
           return;
         }
 
@@ -71,21 +71,22 @@ function Popup() {
         // Push new event to cache
         eventsCache.events.push(event);
         await chrome.storage.local.set({ events: eventsCache.events });
-        setArtists(artists)
+        setArtists(artists);
       }
     }
   }
 
   return (
-    <div
-      className="flex flex-col font-gothic border-1 border-[#121212] min-w-[450px] max-h-[600px] overflow-hidden">
+    <div className="flex flex-col font-gothic border-1 border-[#121212] min-w-[450px] max-h-[600px] overflow-hidden">
       <div className="flex flex-col px-6 py-4 min-h-[200px] bg-[#121212]">
         <h1 className="mb-2 text-6xl text-purered">RA SET FINDER</h1>
         <div className="flex flex-col gap-2">
-          {(!activeTab || !activeTab.isValidTab) ? (
+          {!activeTab || !activeTab.isValidTab ? (
             <div className="flex flex-col gap-2" data-testid="popup-unmatched">
               <p className="text-slatewhite text-3xl">This extension does not work on this page.</p>
-              <p className="text-slatewhite text-3xl">Set Finder only works on <a href="http://ra.co/events">resident advisor</a> event pages.</p>
+              <p className="text-slatewhite text-3xl">
+                Set Finder only works on <a href="http://ra.co/events">resident advisor</a> event pages.
+              </p>
             </div>
           ) : (
             <div className="flex flex-col gap-2" data-testid="popup-matched">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { EventsCache, SetVideo } from '../types/objects.ts';
 
-const API_URL = import.meta.env.PROD ? import.meta.env.VITE_API_URL : "http://localhost:4000";
+const API_URL = import.meta.env.PROD ? import.meta.env.VITE_API_URL : 'http://localhost:4000';
 
 export default function ArtistCard({
   artist,
@@ -16,8 +16,8 @@ export default function ArtistCard({
   const [showSets, setShowSets] = useState<boolean>(false);
 
   async function getSearchResults() {
-    const url = new URL(`${API_URL}/search`)
-    url.searchParams.set("artist", artist);
+    const url = new URL(`${API_URL}/search`);
+    url.searchParams.set('artist', artist);
     const res = await fetch(url.toString(), {
       method: 'GET',
     });
@@ -52,7 +52,7 @@ export default function ArtistCard({
     if (artistData.sets) {
       setShowSets(true);
       setArtistSets(artistData.sets);
-      return
+      return;
     }
 
     // No artist sets found in cache, fetch new sets
@@ -61,7 +61,7 @@ export default function ArtistCard({
       // Update cache
       artistData.sets = sets;
       await chrome.storage.local.set({ events: eventsCache });
-      setShowSets(true)
+      setShowSets(true);
       setArtistSets(sets);
     } catch (e) {
       console.error(e);
@@ -70,25 +70,37 @@ export default function ArtistCard({
 
   return (
     <div className="flex flex-col border-b-1 border-t-1 border-slatewhite/10">
-      <div onClick={() => getSetsList()} key={artist} className="group flex flex-row gap-1 py-4 cursor-pointer items-center">
-        <svg className={`w-[24px] group-hover:fill-purered transition-transform duration-100 ${showSets ? 'rotate-90' : '-rotate-90'}`}
-             xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#e3e3e3"><path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z"/></svg>
-        <p className="text-slatewhite text-4xl group-hover:text-purered">
-          {artist}
-        </p>
+      <div
+        onClick={() => getSetsList()}
+        key={artist}
+        className="group flex flex-row gap-1 py-4 cursor-pointer items-center">
+        <svg
+          className={`w-[24px] group-hover:fill-purered transition-transform duration-100 ${showSets ? 'rotate-90' : '-rotate-90'}`}
+          xmlns="http://www.w3.org/2000/svg"
+          height="24px"
+          viewBox="0 -960 960 960"
+          width="24px"
+          fill="#e3e3e3">
+          <path d="M504-480 320-664l56-56 240 240-240 240-56-56 184-184Z" />
+        </svg>
+        <p className="text-slatewhite text-4xl group-hover:text-purered">{artist}</p>
       </div>
-      {showSets && artistSets && artistSets.map(set => (
-        <a href={`https://www.youtube.com/watch?v=${set.videoId}`} target="_blank" className="cursor-pointer">
-          <div key={set.videoId} className="grid grid-cols-[1fr_2fr] gap-2 w-full max-h-[90px] hover:bg-purered/10 items-center overflow-hidden">
-            <div className="rounded-4xl overflow-hidden">
-              <img src={set.thumbnail} alt={`${artist} DJ Set`} className="aspect-auto object-contain"/>
+      {showSets &&
+        artistSets &&
+        artistSets.map(set => (
+          <a href={`https://www.youtube.com/watch?v=${set.videoId}`} target="_blank" className="cursor-pointer">
+            <div
+              key={set.videoId}
+              className="grid grid-cols-[1fr_2fr] gap-2 w-full max-h-[90px] hover:bg-purered/10 items-center overflow-hidden">
+              <div className="rounded-4xl overflow-hidden">
+                <img src={set.thumbnail} alt={`${artist} DJ Set`} className="aspect-auto object-contain" />
+              </div>
+              <div className="flex flex-col p-1">
+                <p className="text-2xl text-ellipsis line-clamp-2">{set.title}</p>
+              </div>
             </div>
-            <div className="flex flex-col p-1">
-              <p className="text-2xl text-ellipsis line-clamp-2">{set.title}</p>
-            </div>
-          </div>
-        </a>
-      ))}
+          </a>
+        ))}
     </div>
   );
 }

@@ -26,12 +26,16 @@ describe('Background service worker that executes chrome extension events', () =
   it('should store tab state as false when URL is not matched', async () => {
     vi.mocked(chrome.tabs.get).mockResolvedValue({ url: 'https://ra.co/artists/435' } as chrome.tabs.Tab);
     await background.updateActiveTabStatus(1);
-    expect(chrome.storage.local.set).toHaveBeenCalledWith({ activeTab: { isValidTab: false, tabId: 1, eventId: null } });
+    expect(chrome.storage.local.set).toHaveBeenCalledWith({
+      activeTab: { isValidTab: false, tabId: 1, eventId: null },
+    });
   });
 
   it('should store tab state as false when URL is not found', async () => {
     vi.mocked(chrome.tabs.get).mockResolvedValue({} as chrome.tabs.Tab);
     await background.updateActiveTabStatus(1);
-    expect(chrome.storage.local.set).toHaveBeenCalledWith({ activeTab: { isValidTab: false, tabId: 1, eventId: null } });
+    expect(chrome.storage.local.set).toHaveBeenCalledWith({
+      activeTab: { isValidTab: false, tabId: 1, eventId: null },
+    });
   });
 });
