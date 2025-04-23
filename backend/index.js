@@ -6,16 +6,21 @@ require("dotenv").config()
 
 const port = process.env.PORT || 4000
 
-const corsOption = {
+const corsOptions = {
   origin: (origin, callback) => {
-    if (!origin || origin.startsWith("chrome-extension://")) {
-      callback(null, true);
-    } else {
-      callback(new Error("Not allowed by CORS"));
+    if (!origin) {
+      return callback(null, true);
     }
+
+    if (origin.startsWith("chrome-extension://")) {
+      return callback(null, true);
+    }
+
+    callback(new Error("Not allowed by CORS"));
   },
   optionsSuccessStatus: 200,
-}
+};
+
 
 app.use(cors(corsOption));
 app.use("/search", searchRouter);

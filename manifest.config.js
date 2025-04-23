@@ -7,7 +7,7 @@ const manifestConfig = {
   version: packageJson.version,
   manifest_version: 3,
   permissions: ["activeTab", "scripting", "storage"],
-  host_permissions: ["https://ra.co/events/*", 'https://localhost:4000/*'],
+  host_permissions: ["https://ra.co/events/*", 'https://localhost:4000/*', 'https://ra-set-finder-production.up.railway.app/*'],
   icons: {
     16: "icons/icon.png",
     32: "icons/icon.png",
