@@ -4,6 +4,8 @@ const cors = require("cors");
 const searchRouter = require('./routes/searchRouter');
 require("dotenv").config()
 
+const port = process.env.PORT || 4000
+
 const corsOption = {
   origin: (origin, callback) => {
     if (!origin || origin.startsWith("chrome-extension://")) {
@@ -18,7 +20,7 @@ const corsOption = {
 app.use(cors(corsOption));
 app.use("/search", searchRouter);
 
-app.listen(4000, () => {
-  console.log("Express backend listening on port", 4000);
+app.listen(port, () => {
+  console.log("Express backend listening on port", port);
 })
 
