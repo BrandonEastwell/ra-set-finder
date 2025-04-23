@@ -6,7 +6,7 @@ require("dotenv").config()
 
 const port = process.env.PORT || 4000
 
-const corsOptions = {
+const corsOption = {
   origin: (origin, callback) => {
     if (!origin) {
       return callback(null, true);
